@@ -1,0 +1,8 @@
+{
+  "id": "orchestrator",
+  "name": "Orchestrator-Velocity",
+  "version": "1.0.1",
+  "authors": ["kfc"],
+  "main": "me.wowkfccc.orchestratorVelocity.OrchestratorVelocity",
+  "dependencies": []
+}

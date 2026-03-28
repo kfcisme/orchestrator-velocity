@@ -16,7 +16,7 @@ public class VelocityPlayerOps implements Ports.PlayerOps {
                 new Player(p.getUniqueId().toString(),
                         p.getUsername(),
                         p.getCurrentServer().map(s->s.getServerInfo().getName()).orElse("unknown"),
-                        "AFK" // 之後可由 DB 查最新類型
+                        "AFK"
                 )).collect(Collectors.toList());
     }
 

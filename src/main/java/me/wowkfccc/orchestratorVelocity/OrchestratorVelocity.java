@@ -56,6 +56,6 @@ public class OrchestratorVelocity {
             try { engine.runTick(); } catch (Throwable t){ t.printStackTrace(); }
         }).repeat(5, TimeUnit.MINUTES).schedule();
 
-        log.info("MLP-Orchestrator (Velocity) ready.");
+        log.info("Velocity version is ready.");
     }
 }

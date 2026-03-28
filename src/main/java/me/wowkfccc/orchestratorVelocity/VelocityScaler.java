@@ -18,7 +18,7 @@ public class VelocityScaler implements Ports.ScalerOps {
         if (C.logPlanOnly) {
             System.out.println("[MLP-Velocity] scale request -> " + n + " (log only)");
         }
-        // 若要真擴縮，可加 REST call 或雲 API
+        // TODO: call external REST / or API
     }
 }
 

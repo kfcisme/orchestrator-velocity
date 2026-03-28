@@ -1,18 +1,15 @@
-# === Server capacity & ID ===
 server:
-  id: "proxy"             # 本 proxy 名稱 (可自訂)
-  capacity_cpu: 100.0     # 每台伺服器 CPU 容量 (% 指標或基準值)
-  headroom: 0.80          # CPU 使用的安全係數 (80%)
-  capacity_ram_mb: 8192   # 每台伺服器 RAM 容量 (MB)
-  headroom_ram: 0.80      # RAM 使用的安全係數 (80%)
+  id: "proxy"
+  capacity_cpu: 100.0
+  headroom: 0.80
+  capacity_ram_mb: 8192
+  headroom_ram: 0.80
 
-# === LSTM service ===
 lstm:
   enabled: true
-  base_url: "http://127.0.0.1:8900"  # 你的 Python LSTM API
+  base_url: "http://127.0.0.1:8900"
   timeout_ms: 1500
 
-# === Regression model ===
 regression:
   intercept: 5.0
   beta:
@@ -28,7 +25,6 @@ regression:
     y_lag1: 0.20
     y_lag2: 0.10
 
-# === 玩家類型的單位資源需求 ===
 unit_cost_cpu:
   AFK: 0.05
   Build: 0.70
@@ -49,24 +45,21 @@ unit_cost_ram_mb:
   Social: 15
   Survival: 28
 
-# === Autoscaling ===
 autoscale:
-  cpu_steps: [100, 200, 300]    # CPU 負載分界線 (例：100%→開2台)
-  ram_steps_mb: [5000, 9000]    # RAM 負載分界線 (例：>9000MB→多開)
-  cooldown_minutes: 20          # 調整間隔冷卻時間
+  cpu_steps: [100, 200, 300]
+  ram_steps_mb: [5000, 9000]
+  cooldown_minutes: 20
   hysteresis:
-    up: 2                       # 連續兩次超標才擴容
-    down: 3                     # 連續三次低於門檻才縮容
+    up: 2
+    down: 3
 
-# === Placement planner ===
 placement:
-  migrate_penalty: 0.5          # 搬家懲罰
-  allow_over_ratio: 0.05        # 允許輕微超量 (5%)
+  migrate_penalty: 0.5
+  allow_over_ratio: 0.05
   score:
-    cpu_weight: 0.6             # CPU 評分權重
-    ram_weight: 0.4             # RAM 評分權重
+    cpu_weight: 0.6
+    ram_weight: 0.4
 
-# === MySQL database ===
 mysql:
   url: "jdbc:mysql://127.0.0.1:3306/mc_analytics?useSSL=false&serverTimezone=UTC"
   username: "mc_user"
@@ -74,11 +67,11 @@ mysql:
   pool_size: 8
 
 tables:
-  comp: "server_comp_30m"       # 玩家組成統計表
-  load: "server_load_30m"       # 系統資源表
-  pred: "player_type_pred"      # 玩家類型預測表
-  horizon: 6                    # 每次取最近 N 筆樣本
+  comp: "server_comp_30m"
+  load: "server_load_30m"
+  pred: "player_type_pred"
+  horizon: 6
 
-# === Velocity 特定設定 ===
+# disable all if not using velocity server api
 velocity:
-  log_plan_only: true           # 僅 log 規劃，不實際搬玩家 (debug 用)
+  log_plan_only: true

@@ -15,17 +15,27 @@ public class MySQLRepo implements Ports.MetricsRepo {
     public MySQLRepo(VelocityConfig C) {
         this.C = C;
 
-        // 初始化 HikariCP
         HikariConfig cfg = new HikariConfig();
-        cfg.setJdbcUrl(C.jdbcUrl);
+        cfg.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+        String url = C.jdbcUrl;
+        if (url.contains("jdbc:mysql://127.0.0.1")) {
+            url = url.replace("jdbc:mysql://127.0.0.1", "jdbc:mysql://mysql"); // or db
+        }
+        cfg.setJdbcUrl(url);
+
         cfg.setUsername(C.jdbcUser);
         cfg.setPassword(C.jdbcPass);
         cfg.setMaximumPoolSize(C.poolSize);
         cfg.setMinimumIdle(1);
         cfg.setPoolName("MLP-Orchestrator-Velocity");
+
+        try { Class.forName("com.mysql.cj.jdbc.Driver"); }
+        catch (ClassNotFoundException e) { throw new RuntimeException("MySQL driver not in shaded JAR", e); }
+
         ds = new HikariDataSource(cfg);
 
-        // 啟動時檢查 / 創建表格
+
         ensureTables();
     }
 
@@ -33,7 +43,7 @@ public class MySQLRepo implements Ports.MetricsRepo {
         try (Connection conn = ds.getConnection()) {
             DatabaseMetaData meta = conn.getMetaData();
 
-            // comp 表
+            // comp
             if (!tableExists(meta, C.tblComp)) {
                 try (Statement st = conn.createStatement()) {
                     st.executeUpdate("CREATE TABLE `" + C.tblComp + "` (" +
@@ -47,7 +57,7 @@ public class MySQLRepo implements Ports.MetricsRepo {
                 }
             }
 
-            // load 表
+            // load
             if (!tableExists(meta, C.tblLoad)) {
                 try (Statement st = conn.createStatement()) {
                     st.executeUpdate("CREATE TABLE `" + C.tblLoad + "` (" +
@@ -60,7 +70,7 @@ public class MySQLRepo implements Ports.MetricsRepo {
                 }
             }
 
-            // pred 表
+            // pred
             if (!tableExists(meta, C.tblPred)) {
                 try (Statement st = conn.createStatement()) {
                     st.executeUpdate("CREATE TABLE `" + C.tblPred + "` (" +
@@ -84,7 +94,6 @@ public class MySQLRepo implements Ports.MetricsRepo {
         }
     }
 
-    // === MetricsRepo 實作 ===
     @Override
     public List<CompPoint> recentComp(int horizon) {
         List<CompPoint> list = new ArrayList<>();
